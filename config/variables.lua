@@ -4,7 +4,7 @@ local variables = {}
 
 function variables.init(status)
 
-local terminal = "st" or "urxvt -lsp 1 -geometry 120x30" or "xterm"
+local terminal = "urxvt"
 local editor = "vim" or os.getenv("EDITOR") or "nano" or "vi"
 
 status.vars = {
