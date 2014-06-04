@@ -1,5 +1,5 @@
 local config = {
---  notify  = require("config.notify"),
+    notify  = require("config.notify"),
     variables = require("config.variables"),
 --  autorun = require("config.autorun"),
     layouts = require("config.layouts"),
