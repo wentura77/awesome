@@ -5,8 +5,8 @@ local config = {
     layouts = require("config.layouts"),
     menus   = require("config.menus"),
 --  toolbar = require("config.toolbar"),
---  keys    = require("config.keys"),
---  rules   = require("config.rules"),
+    keys    = require("config.keys"),
+    rules   = require("config.rules"),
 --  signals = require("config.signals")
 }
 
