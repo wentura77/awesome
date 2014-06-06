@@ -1,6 +1,7 @@
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local awful = require("awful")
+local vicious = require("vicious")
 
 local screen = screen
 local client = client
@@ -22,6 +23,29 @@ local modkey = status.modkey
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
 
+--cpuicon = awful.widget.imagebox()
+--cpuicon.image = image(beautiful.widget_cpu)
+cpuwidget = awful.widget.graph()
+-- Свойства графика
+cpuwidget:set_width(50)
+cpuwidget:set_background_color("#494B4F")
+cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 10,0 }, stops = { {0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96" }}})
+-- Регистрация виджета
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+
+--Battery Widget
+batt = wibox.widget.textbox()
+vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT1")
+
+batwidget = awful.widget.progressbar()
+  batwidget:set_width(8)
+  batwidget:set_height(10)
+  batwidget:set_vertical(true)
+  batwidget:set_background_color("#494B4F")
+  batwidget:set_border_color(nil)
+  batwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 10 }, stops = { { 0, "#AECF96" }, { 0.5, "#88A175" }, { 1, "#FF5656" }}})
+  vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT1")
+  --vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT1")
 -- Create a wibox for each screen and add it
 local mywibox = {}
 mypromptbox = {}
@@ -101,6 +125,10 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    --right_layout:add(cpuicon)
+    right_layout:add(batwidget)
+    right_layout:add(batt)
+    right_layout:add(cpuwidget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
