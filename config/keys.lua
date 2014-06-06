@@ -85,7 +85,7 @@ globalkeys = awful.util.table.join(
     awful.key({                   }, "XF86AudioLowerVolume"   , function () awful.util.spawn(lower_volume_cmd) end),
     awful.key({                   }, "XF86MonBrightnessDown"  , function () awful.util.spawn(down_brightness_cmd) end),
     awful.key({                   }, "XF86MonBrightnessUp"    , function () awful.util.spawn(up_brightness_cmd) end),
-    awful.key({                   }, "XF86AudioMute"          , function () awful.util.spawn(mute_cmd) end),
+    --awful.key({                   }, "XF86AudioMute"          , function () awful.util.spawn(mute_cmd) end),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
