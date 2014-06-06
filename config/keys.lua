@@ -26,6 +26,8 @@ local down_brightness_cmd = "xbacklight -10"
 
 local raise_volume_cmd = "amixer -q set Master 5%+ unmute"
 local lower_volume_cmd = "amixer -q set Master 5%- unmute"
+local monitor_cmd =  "/home/wentura/bin/monitor.sh"
+
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
 	awful.button({ }, 3, function () status.menu.mainmenu:toggle() end),
@@ -75,6 +77,7 @@ local globalkeys = awful.util.table.join(
     awful.key({                   }, "XF86AudioLowerVolume"   , function () awful.util.spawn(lower_volume_cmd) end),
     awful.key({                   }, "XF86MonBrightnessDown"  , function () awful.util.spawn(down_brightness_cmd) end),
     awful.key({                   }, "XF86MonBrightnessUp"    , function () awful.util.spawn(up_brightness_cmd) end),
+    awful.key({                   }, "XF86Display"   		  , function () awful.util.spawn(monitor_cmd) end),
     --awful.key({                   }, "XF86AudioMute"          , function () awful.util.spawn(mute_cmd) end),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
