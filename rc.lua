@@ -31,7 +31,7 @@ config.signals.init(status)
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init("~/.config/awesome/theme.lua")
 -- {{{ Naughty presets
 local naughty = require("naughty")
 naughty.config.defaults.timeout = 5
