@@ -26,7 +26,9 @@ awful.rules.rules = {
     properties = { floating=true } },
   { rule = { class = "Chromium" },
     properties = { tag=status.tags[1][2], raise=false } },
-  { rule = { class = "Skype" },
+  { rule = { class = "Google-chrome-stable" },
+    properties = { tag=status.tags[1][3], raise=false } },
+  { rule = { class = "Geany" },
     properties = { tag=status.tags[1][4], raise=false } },
 
 }
