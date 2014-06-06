@@ -20,18 +20,21 @@ local status = {
     eth_if = 'enp0s25,'
   },
 }
-config.variables.init(status)
-config.menus.init(status)
-config.layouts.init(status)
+local configpath="/home/"..os.getenv("USER").."/.config/awesome/"
+
 config.notify.init(status)
-config.rules.init(status)
-config.keys.init(status)
+config.variables.init(status)
+--config.autorun.init(status)
+config.layouts.init(status)
+config.menus.init(status)
 config.toolbar.init(status)
+config.keys.init(status)
+config.rules.init(status)
 config.signals.init(status)
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("~/.config/awesome/theme.lua")
+beautiful.init(configpath.."theme.lua")
 -- {{{ Naughty presets
 local naughty = require("naughty")
 naughty.config.defaults.timeout = 5
