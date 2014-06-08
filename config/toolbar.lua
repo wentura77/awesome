@@ -29,7 +29,7 @@ cpuwidget = awful.widget.graph()
 -- Свойства графика
 cpuwidget:set_width(50)
 cpuwidget:set_background_color("#494B4F")
-cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 10,0 }, stops = { {0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96" }}})
+cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0,10 }, stops = { {0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96" }}})
 -- Регистрация виджета
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
 
@@ -46,6 +46,18 @@ batwidget = awful.widget.progressbar()
   batwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 10 }, stops = { { 0, "#AECF96" }, { 0.5, "#88A175" }, { 1, "#FF5656" }}})
   vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT1")
   --vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT1")
+-- Инициализация виджета
+memwidget = awful.widget.progressbar()
+-- Свойства индикатора
+memwidget:set_width(8)
+memwidget:set_height(10)
+memwidget:set_vertical(true)
+memwidget:set_background_color("#494B4F")
+memwidget:set_border_color(nil)
+memwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0,10 }, stops = { {1, "#AECF96"}, {0.5, "#88A175"}, 
+                    {0, "#FF5656"}}})
+-- Регистрация виджета
+vicious.register(memwidget, vicious.widgets.mem, "$1", 13)
 -- Create a wibox for each screen and add it
 local mywibox = {}
 mypromptbox = {}
@@ -129,6 +141,7 @@ for s = 1, screen.count() do
     right_layout:add(batwidget)
     right_layout:add(batt)
     right_layout:add(cpuwidget)
+    right_layout:add(memwidget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
