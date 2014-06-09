@@ -20,7 +20,7 @@ local status = {
     eth_if = 'enp0s25,'
   },
 }
-local configpath="/home/"..os.getenv("USER").."/.config/awesome/"
+local configpath = awful.util.getdir("config")
 
 config.notify.init(status)
 config.variables.init(status)
@@ -34,7 +34,7 @@ config.signals.init(status)
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(configpath.."theme.lua")
+beautiful.init(configpath .. "/themes/default/theme.lua")
 -- {{{ Naughty presets
 local naughty = require("naughty")
 naughty.config.defaults.timeout = 5
