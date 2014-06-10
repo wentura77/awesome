@@ -24,6 +24,9 @@ local modkey = status.modkey
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
 
+-------------------------------------------------------------------------------------------
+-- Виджет процессора
+-------------------------------------------------------------------------------------------
 --cpuicon = awful.widget.imagebox()
 --cpuicon.image = image(beautiful.widget_cpu)
 cpuwidget = awful.widget.graph()
@@ -55,70 +58,10 @@ batwidget1 = awful.widget.progressbar()
   batwidget1:set_border_color(nil)
   batwidget1:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 10 }, stops = { { 0, "#AECF96" }, { 0.5, "#88A175" }, { 1, "#FF5656" }}})
   vicious.register(batwidget1, vicious.widgets.bat, "$2", 61, "BAT1")
--- {{{ BATTERY
--- Battery attributes
-local bat_state  = ""
-local bat_charge = 0
-local bat_time   = 0
-local blink      = true
-
 -- Icon
 baticon = wibox.widget.imagebox()
 baticon:set_image(beautiful.widget_batfull)
 
--- Charge %
-batpct = wibox.widget.textbox()
-vicious.register(batpct, vicious.widgets.bat, function(widget, args)
-  bat_state  = args[1]
-  bat_charge = args[2]
-  bat_time   = args[3]
-
-  if args[1] == "-" then
-    if bat_charge > 70 then
-      baticon:set_image(beautiful.widget_batfull)
-    elseif bat_charge > 30 then
-      baticon:set_image(beautiful.widget_batmed)
-    elseif bat_charge > 10 then
-      baticon:set_image(beautiful.widget_batlow)
-    else
-      baticon:set_image(beautiful.widget_batempty)
-    end
-  else
-    baticon:set_image(beautiful.widget_ac)
-    if args[1] == "+" then
-      blink = not blink
-      if blink then
-        baticon:set_image(beautiful.widget_acblink)
-      end
-    end
-  end
-
-  return args[2] .. "%"
-end, nil, "BAT1")
-
--- Buttons
-function popup_bat()
-  local state = ""
-  if bat_state == "↯" then
-    state = "Full"
-  elseif bat_state == "↯" then
-    state = "Charged"
-  elseif bat_state == "+" then
-    state = "Charging"
-  elseif bat_state == "-" then
-    state = "Discharging"
-  elseif bat_state == "⌁" then
-    state = "Not charging"
-  else
-    state = "Unknown"
-  end
-
-  naughty.notify { text = "Charge : " .. bat_charge .. "%\nState  : " .. state ..
-    " (" .. bat_time .. ")", timeout = 5, hover_timeout = 0.5 }
-end
-batpct:buttons(awful.util.table.join(awful.button({ }, 1, popup_bat)))
-baticon:buttons(batpct:buttons())
--- End Battery}}}
 --
 -- Инициализация виджета
 memwidget = awful.widget.progressbar()
@@ -213,10 +156,7 @@ for s = 1, screen.count() do
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     --right_layout:add(cpuicon)
     right_layout:add(batwidget)
-    right_layout:add(batt)
     right_layout:add(baticon)
-
-    right_layout:add(batpct)
     right_layout:add(batwidget1)
     right_layout:add(cpuwidget)
     right_layout:add(memwidget)
