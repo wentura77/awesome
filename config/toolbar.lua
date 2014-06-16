@@ -8,6 +8,7 @@ local screen = screen
 local client = client
 local mouse = mouse
 
+local configpath = awful.util.getdir("config")
 --local actionless = require("actionless")
 --local widgets = actionless.widgets
 --local custom_tasklist = actionless.tasklist
@@ -25,10 +26,10 @@ local modkey = status.modkey
 mytextclock = awful.widget.textclock()
 
 -------------------------------------------------------------------------------------------
--- Виджет процессора
+-- Виджет использования процессора
 -------------------------------------------------------------------------------------------
---cpuicon = awful.widget.imagebox()
---cpuicon.image = image(beautiful.widget_cpu)
+cpuicon = wibox.widget.imagebox()
+cpuicon:set_image(configpath .. "/themes/default/widgets/cpu.png")
 cpuwidget = awful.widget.graph()
 -- Свойства графика
 cpuwidget:set_width(50)
@@ -37,44 +38,58 @@ cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0,10 }, stops = {
 -- Регистрация виджета
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
 
---Battery Widget
+-------------------------------------------------------------------------------------------
+-- Виджет заряда батареи
+-------------------------------------------------------------------------------------------
 batt = wibox.widget.textbox()
 vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT0")
 
-batwidget = awful.widget.progressbar()
-  batwidget:set_width(8)
-  batwidget:set_height(10)
-  batwidget:set_vertical(true)
-  batwidget:set_background_color("#494B4F")
-  batwidget:set_border_color(nil)
-  batwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 10 }, stops = { { 0, "#AECF96" }, { 0.5, "#88A175" }, { 1, "#FF5656" }}})
-  vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT0")
-  --vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT1")
-batwidget1 = awful.widget.progressbar()
-  batwidget1:set_width(8)
-  batwidget1:set_height(10)
-  batwidget1:set_vertical(true)
-  batwidget1:set_background_color("#494B4F")
-  batwidget1:set_border_color(nil)
-  batwidget1:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 10 }, stops = { { 0, "#AECF96" }, { 0.5, "#88A175" }, { 1, "#FF5656" }}})
-  vicious.register(batwidget1, vicious.widgets.bat, "$2", 61, "BAT1")
+battext = wibox.widget.textbox("battext")
+battext1 = wibox.widget.textbox("battext")
+function battery_status_text(widget, args)
+    local perc = args[2]
+    if perc < 15 then
+        return '<span color="red">' .. perc .. '%</span>'
+    elseif perc < 50 then
+        return '<span color="yellow">' .. perc .. '%</span>'
+    end
+    return '<span color="#8EAE6E">' .. perc .. '%</span>'
+end
+vicious.register(battext, vicious.widgets.bat, battery_status_text, 120, "BAT0")
+vicious.register(battext1, vicious.widgets.bat, battery_status_text, 120, "BAT1")
+
 -- Icon
 baticon = wibox.widget.imagebox()
-baticon:set_image(beautiful.widget_batfull)
+--baticon:set_image(beautiful.widget_batfull)
+baticon:set_image(configpath .. "/themes/default/widgets/bat.png")
 
---
--- Инициализация виджета
-memwidget = awful.widget.progressbar()
--- Свойства индикатора
-memwidget:set_width(8)
-memwidget:set_height(10)
-memwidget:set_vertical(true)
-memwidget:set_background_color("#494B4F")
-memwidget:set_border_color(nil)
-memwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0,10 }, stops = { {1, "#AECF96"}, {0.5, "#88A175"}, 
-                    {0, "#FF5656"}}})
+
+-------------------------------------------------------------------------------------------
+-- Виджет использования памяти
+-------------------------------------------------------------------------------------------
+memicon = wibox.widget.imagebox()
+--memicon:set_image(beautiful.widget_memfull)
+memicon:set_image(configpath .. "/themes/default/widgets/ram.png")
 -- Регистрация виджета
-vicious.register(memwidget, vicious.widgets.mem, "$1", 13)
+memwidget = wibox.widget.textbox("battext")
+vicious.register(memwidget, vicious.widgets.mem, function(widget, args)
+  mem_procent  = args[1]
+  mem_used = args[2]
+  mem_total   = args[3]
+  mem_free   = args[4]
+  return args[1] .. "%"
+end, nil, 13)
+--Всплывающее меню
+function popup_mem()
+  naughty.notify { 
+      title = "Использование памяти", 
+      text = "Занято      : ".. mem_used .."Mb\nСвободно    : " .. mem_free .. "Mb\nВсего       : " .. mem_total .. "Mb", 
+      timeout = 5, 
+      hover_timeout = 0.5 }
+end
+memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+memwidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+-------------------------------------------------------------------------------------------
 -- Create a wibox for each screen and add it
 local mywibox = {}
 mypromptbox = {}
@@ -154,11 +169,15 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
-    --right_layout:add(cpuicon)
-    right_layout:add(batwidget)
-    right_layout:add(baticon)
-    right_layout:add(batwidget1)
+    right_layout:add(cpuicon)
     right_layout:add(cpuwidget)
+    --right_layout:add(batwidget)
+    right_layout:add(baticon)
+    right_layout:add(battext)
+    right_layout:add(baticon)
+    right_layout:add(battext1)
+    --right_layout:add(batwidget1)
+    right_layout:add(memicon)
     right_layout:add(memwidget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
