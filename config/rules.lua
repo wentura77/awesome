@@ -24,12 +24,16 @@ awful.rules.rules = {
 
   { rule = { class = "MPlayer" },
     properties = { floating=true } },
-  { rule = { class = "Chromium" },
+  { rule = { class = "Remmina" },
     properties = { tag=status.tags[1][2], raise=false } },
+  { rule = { class = "Chromium" },
+    properties = { tag=status.tags[1][3], raise=false } },
   { rule = { class = "Google-chrome-stable" },
     properties = { tag=status.tags[1][3], raise=false } },
   { rule = { class = "Geany" },
     properties = { tag=status.tags[1][4], raise=false } },
+  { rule = { class = "Java" },
+    properties = { tag=status.tags[1][2], raise=false } },
 
 }
 -- }}}
