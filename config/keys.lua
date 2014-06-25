@@ -1,6 +1,7 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local menubar = require("menubar")
+local naughty = require("naughty")
 local screen = screen
 local client = client
 local mouse = mouse
@@ -79,6 +80,18 @@ local globalkeys = awful.util.table.join(
     awful.key({                   }, "XF86MonBrightnessUp"    , function () awful.util.spawn(up_brightness_cmd) end),
     awful.key({                   }, "XF86Display"   		  , function () awful.util.spawn(monitor_cmd) end),
     --awful.key({                   }, "XF86AudioMute"          , function () awful.util.spawn(mute_cmd) end),
+    awful.key({ "Mod1"            }, "Print",
+        function ()
+	    awful.util.spawn("scrot -u -e 'mv $f ~/Pictures/Shot/'")
+	    os.execute("sleep 0.5")
+	    naughty.notify({ title="Screenshot", text="The focused window captured" })
+        end),
+    awful.key({                   }, "Print",
+        function ()
+	    awful.util.spawn("scrot -e 'mv $f ~/Pictures/Shot/'")
+	    os.execute("sleep 0.5")
+	    naughty.notify({ title="Screenshot", text="Full screen captured" })
+        end),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
