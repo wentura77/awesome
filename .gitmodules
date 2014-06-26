@@ -4,3 +4,6 @@
 [submodule "awesome-freedesktop"]
 	path = awesome-freedesktop
 	url = https://github.com/terceiro/awesome-freedesktop.git
+[submodule "blingbling"]
+	path = blingbling
+	url = https://github.com/cedlemo/blingbling.git

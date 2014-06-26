@@ -1,36 +1,32 @@
-local wibox = require("wibox")
-local beautiful = require("beautiful")
-local awful = require("awful")
-local vicious = require("vicious")
-local naughty = require("naughty")
+local wibox         = require("wibox")
+local beautiful     = require("beautiful")
+local awful         = require("awful")
+local vicious       = require("vicious")
+local naughty       = require("naughty")
 
-local screen = screen
-local client = client
-local mouse = mouse
+local screen        = screen
+local client        = client
+local mouse         = mouse
 
-local configpath = awful.util.getdir("config")
+local configpath    = awful.util.getdir("config")
 --local actionless = require("actionless")
 --local widgets = actionless.widgets
 --local custom_tasklist = actionless.tasklist
 --local rpic = widgets.random_pic
 
-
 local toolbar = {}
-
-
 function toolbar.init(status)
-local modkey = status.modkey
+local modkey        = status.modkey
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock()
-
+mytextclock         = awful.widget.textclock()
 -------------------------------------------------------------------------------------------
 -- Виджет использования процессора
 -------------------------------------------------------------------------------------------
-cpuicon = wibox.widget.imagebox()
+cpuicon             = wibox.widget.imagebox()
 cpuicon:set_image(configpath .. "/themes/default/widgets/cpu.png")
-cpuwidget = awful.widget.graph()
+cpuwidget           = awful.widget.graph()
 -- Свойства графика
 cpuwidget:set_width(50)
 cpuwidget:set_background_color("#494B4F")
@@ -41,11 +37,11 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
 -------------------------------------------------------------------------------------------
 -- Виджет заряда батареи
 -------------------------------------------------------------------------------------------
-batt = wibox.widget.textbox()
+batt                = wibox.widget.textbox()
 vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT0")
 
-battext = wibox.widget.textbox("battext")
-battext1 = wibox.widget.textbox("battext")
+battext             = wibox.widget.textbox("battext")
+battext1            = wibox.widget.textbox("battext")
 function battery_status_text(widget, args)
     local perc = args[2]
     if perc < 15 then
