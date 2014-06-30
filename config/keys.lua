@@ -27,6 +27,7 @@ local down_brightness_cmd = "xbacklight -10"
 
 local raise_volume_cmd = "amixer -q set Master 5%+ unmute"
 local lower_volume_cmd = "amixer -q set Master 5%- unmute"
+local mute_volume_cmd = "amixer -q set Master mute"
 local monitor_cmd =  "/home/wentura/bin/monitor.sh"
 
 -- {{{ Mouse bindings
@@ -76,10 +77,10 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "l", function () awful.util.spawn("slock") end),
     awful.key({                   }, "XF86AudioRaiseVolume"   , function () awful.util.spawn(raise_volume_cmd) end),
     awful.key({                   }, "XF86AudioLowerVolume"   , function () awful.util.spawn(lower_volume_cmd) end),
+    awful.key({                   }, "XF86AudioMute"          , function () awful.util.spawn(mute_volume_cmd) end),
     awful.key({                   }, "XF86MonBrightnessDown"  , function () awful.util.spawn(down_brightness_cmd) end),
     awful.key({                   }, "XF86MonBrightnessUp"    , function () awful.util.spawn(up_brightness_cmd) end),
     awful.key({                   }, "XF86Display"   		  , function () awful.util.spawn(monitor_cmd) end),
-    --awful.key({                   }, "XF86AudioMute"          , function () awful.util.spawn(mute_cmd) end),
     awful.key({ "Mod1"            }, "Print",
         function ()
 	    awful.util.spawn("scrot -u -e 'mv $f ~/Pictures/Shot/'")

@@ -3,7 +3,7 @@ local beautiful     = require("beautiful")
 local awful         = require("awful")
 local vicious       = require("vicious")
 local naughty       = require("naughty")
-
+local blingbling    = require("blingbling")
 local screen        = screen
 local client        = client
 local mouse         = mouse
@@ -26,20 +26,34 @@ mytextclock         = awful.widget.textclock()
 -------------------------------------------------------------------------------------------
 cpuicon             = wibox.widget.imagebox()
 cpuicon:set_image(configpath .. "/themes/default/widgets/cpu.png")
-cpuwidget           = awful.widget.graph()
--- Свойства графика
-cpuwidget:set_width(50)
-cpuwidget:set_background_color("#494B4F")
-cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0,10 }, stops = { {0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96" }}})
--- Регистрация виджета
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
 
+cpu=blingbling.line_graph.new()
+    cpu:set_font_size(12)
+    cpu:set_height(22)
+    cpu:set_width(60)
+    cpu:set_show_text(true)
+    cpu:set_label("$percent %")
+    cpu:set_graph_color(beautiful.graph_color)
+    cpu:set_graph_line_color(beautiful.graph_line_color)
+    cpu:set_text_color(beautiful.text_color)
+    --cpu:set_background_text_color(beautiful.background_text_color)
+--     cpu:set_tiles_color("#00000022")
+    cpu:set_h_margin(2)
+    vicious.register(cpu, vicious.widgets.cpu, '$1',1)
+
+-------------------------------------------------------------------------------------------
+-- Виджет виджет загрузки сети
+-------------------------------------------------------------------------------------------
+    netwidget = blingbling.net({interface = "wlp3s0", show_text = true})
+    blingbling.popups.netstat(netwidget) --,{ title_color = beautiful.notify_font_color_1, 
+                                         --   established_color= beautiful.notify_font_color_3, 
+                                         -- listen_color=beautiful.notify_font_color_2})
+    --netwidget:set_ippopup()
 -------------------------------------------------------------------------------------------
 -- Виджет заряда батареи
 -------------------------------------------------------------------------------------------
 batt                = wibox.widget.textbox()
 vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT0")
-
 battext             = wibox.widget.textbox("battext")
 battext1            = wibox.widget.textbox("battext")
 function battery_status_text(widget, args)
@@ -63,18 +77,33 @@ baticon:set_image(configpath .. "/themes/default/widgets/bat.png")
 -------------------------------------------------------------------------------------------
 -- Виджет использования памяти
 -------------------------------------------------------------------------------------------
+  -- Mem Widget
+    memwidgetb = blingbling.line_graph.new()
+    memwidgetb:set_font_size(12)
+    memwidgetb:set_height(22)
+    memwidgetb:set_width(60)
+    memwidgetb:set_show_text(true)
+    memwidgetb:set_label("$percent %")
+    memwidgetb:set_graph_color(beautiful.graph_color)
+    memwidgetb:set_graph_line_color(beautiful.graph_line_color)
+    memwidgetb:set_text_color(beautiful.text_color)
+    memwidgetb:set_text_background_color(beautiful.background_text_color)
+--     memwidget:set_tiles_color("#00000022")
+    memwidgetb:set_h_margin(2)
+    vicious.register(memwidgetb, vicious.widgets.mem, "$1", 5)
+
 memicon = wibox.widget.imagebox()
 --memicon:set_image(beautiful.widget_memfull)
 memicon:set_image(configpath .. "/themes/default/widgets/ram.png")
 -- Регистрация виджета
-memwidget = wibox.widget.textbox("battext")
-vicious.register(memwidget, vicious.widgets.mem, function(widget, args)
-  mem_procent  = args[1]
-  mem_used = args[2]
-  mem_total   = args[3]
-  mem_free   = args[4]
-  return args[1] .. "%"
-end, nil, 13)
+--memwidget = wibox.widget.textbox("battext")
+--vicious.register(memwidget, vicious.widgets.mem, function(widget, args)
+--  mem_procent  = args[1]
+--  mem_used = args[2]
+--  mem_total   = args[3]
+--  mem_free   = args[4]
+--  return args[1] .. "%"
+--end, nil, 13)
 --Всплывающее меню
 function popup_mem()
   naughty.notify { 
@@ -83,8 +112,24 @@ function popup_mem()
       timeout = 5, 
       hover_timeout = 0.5 }
 end
-memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
-memwidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+--memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+--memwidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+
+
+
+  --Volume
+    --volume_label = wibox.widget.textbox
+    --volume_label.text= setFs("large","Vol.: ")
+    my_volume=blingbling.volume.new()
+    my_volume:set_height(18)
+    my_volume:set_v_margin(2)
+    my_volume:set_width(30)
+    my_volume:update_master()
+    my_volume:set_master_control()
+    my_volume:set_bar(true)
+    --my_volume:set_background_graph_color("#00000066")
+    my_volume:set_graph_color(beautiful.graph_line_color)
+
 -------------------------------------------------------------------------------------------
 -- Create a wibox for each screen and add it
 local mywibox = {}
@@ -118,14 +163,21 @@ mytasklist.buttons = awful.util.table.join(
                                               end
                                           end),
                      awful.button({ }, 3, function ()
-                                              if instance then
-                                                  instance:hide()
-                                                  instance = nil
-                                              else
-                                                  instance = awful.menu.clients({
-                                                      theme = { width = 250 }
-                                                  })
-                                              end
+                                            if status.menu.instance then
+                                                status.menu.instance:hide()
+                                                status.menu.instance = nil
+                                            else
+                                                status.menu.instance = awful.menu.clients({
+                                                theme = {width=screen[mouse.screen].workarea.width}
+                                                --coords = {x=18, y=18}})
+                                              --if instance then
+                                              --    instance:hide()
+                                              --   instance = nil
+                                              --else
+                                              --    instance = awful.menu.clients({
+                                              --        theme = { width = 250 }
+                                             })
+                                            end
                                           end),
                      awful.button({ }, 4, function ()
                                               awful.client.focus.byidx(1)
@@ -154,7 +206,7 @@ for s = 1, screen.count() do
     -- Create a tasklist widget
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    mywibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
@@ -166,7 +218,8 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(cpuicon)
-    right_layout:add(cpuwidget)
+    right_layout:add(cpu)
+    --right_layout:add(cpuwidget)
     --right_layout:add(batwidget)
     right_layout:add(baticon)
     right_layout:add(battext)
@@ -174,7 +227,10 @@ for s = 1, screen.count() do
     right_layout:add(battext1)
     --right_layout:add(batwidget1)
     right_layout:add(memicon)
-    right_layout:add(memwidget)
+    --right_layout:add(memwidget)
+    right_layout:add(memwidgetb)
+    right_layout:add(netwidget)
+    right_layout:add(my_volume)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
