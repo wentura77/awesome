@@ -36,8 +36,7 @@ cpu=blingbling.line_graph.new()
     cpu:set_graph_color(beautiful.graph_color)
     cpu:set_graph_line_color(beautiful.graph_line_color)
     cpu:set_text_color(beautiful.text_color)
-    --cpu:set_background_text_color(beautiful.background_text_color)
---     cpu:set_tiles_color("#00000022")
+    cpu:set_text_background_color(beautiful.background_text_color)
     cpu:set_h_margin(2)
     vicious.register(cpu, vicious.widgets.cpu, '$1',1)
 
@@ -78,32 +77,31 @@ baticon:set_image(configpath .. "/themes/default/widgets/bat.png")
 -- Виджет использования памяти
 -------------------------------------------------------------------------------------------
   -- Mem Widget
-    memwidgetb = blingbling.line_graph.new()
-    memwidgetb:set_font_size(12)
-    memwidgetb:set_height(22)
-    memwidgetb:set_width(60)
-    memwidgetb:set_show_text(true)
-    memwidgetb:set_label("$percent %")
-    memwidgetb:set_graph_color(beautiful.graph_color)
-    memwidgetb:set_graph_line_color(beautiful.graph_line_color)
-    memwidgetb:set_text_color(beautiful.text_color)
-    memwidgetb:set_text_background_color(beautiful.background_text_color)
---     memwidget:set_tiles_color("#00000022")
-    memwidgetb:set_h_margin(2)
-    vicious.register(memwidgetb, vicious.widgets.mem, "$1", 5)
+    memvidget = blingbling.line_graph.new()
+    memvidget:set_font_size(12)
+    memvidget:set_height(22)
+    memvidget:set_width(60)
+    memvidget:set_show_text(true)
+    memvidget:set_label("$percent %")
+    memvidget:set_graph_color(beautiful.graph_color)
+    memvidget:set_graph_line_color(beautiful.graph_line_color)
+    memvidget:set_text_color(beautiful.text_color)
+    memvidget:set_text_background_color(beautiful.background_text_color)
+    memvidget:set_h_margin(2)
+    --vicious.register(memvidget, vicious.widgets.mem, "$1", 5)
 
 memicon = wibox.widget.imagebox()
 --memicon:set_image(beautiful.widget_memfull)
 memicon:set_image(configpath .. "/themes/default/widgets/ram.png")
 -- Регистрация виджета
 --memwidget = wibox.widget.textbox("battext")
---vicious.register(memwidget, vicious.widgets.mem, function(widget, args)
---  mem_procent  = args[1]
---  mem_used = args[2]
---  mem_total   = args[3]
---  mem_free   = args[4]
---  return args[1] .. "%"
---end, nil, 13)
+vicious.register(memvidget, vicious.widgets.mem, function(widget, args)
+  mem_procent  = args[1]
+  mem_used = args[2]
+  mem_total   = args[3]
+  mem_free   = args[4]
+  return args[1]
+end, nil, 13)
 --Всплывающее меню
 function popup_mem()
   naughty.notify { 
@@ -112,8 +110,8 @@ function popup_mem()
       timeout = 5, 
       hover_timeout = 0.5 }
 end
---memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
---memwidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+memvidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
 
 
 
@@ -228,7 +226,7 @@ for s = 1, screen.count() do
     --right_layout:add(batwidget1)
     right_layout:add(memicon)
     --right_layout:add(memwidget)
-    right_layout:add(memwidgetb)
+    right_layout:add(memvidget)
     right_layout:add(netwidget)
     right_layout:add(my_volume)
     right_layout:add(mytextclock)
