@@ -4,6 +4,8 @@ local awesome = awesome
 local menubar = require("menubar")
 local beautiful = require("beautiful")
 
+-- Load Debian menu entries
+require("debian.menu")
 local menus = {}
 
 
@@ -21,6 +23,7 @@ local myawesomemenu = {
 
 status.menu.mainmenu = awful.menu({items = {
   { "awesome", myawesomemenu, beautiful.awesome_icon },
+  { "Debian", debian.menu.Debian_menu.Debian },
   { "kill compositor", "killall compton" },
   { "start compositor", status.cmds.compositor },
   { "open terminal", status.cmds.terminal }
