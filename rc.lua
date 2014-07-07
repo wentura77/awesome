@@ -16,11 +16,14 @@ local status = {
   modkey = "Mod4",
   altkey = "Mod1",
   config = {
-    wlan_if = 'wlp3s0',
-    eth_if = 'enp0s25,'
+    wlan_if = 'wlan0',
+    eth_if = 'eth0'
   },
 }
 local configpath = awful.util.getdir("config")
+-- Themes define colours, icons, font and wallpapers.
+beautiful.init(configpath .. "/themes/default/theme.lua")
+
 
 config.notify.init(status)
 config.variables.init(status)
@@ -33,8 +36,6 @@ config.rules.init(status)
 config.signals.init(status)
 
 -- {{{ Variable definitions
--- Themes define colours, icons, font and wallpapers.
-beautiful.init(configpath .. "/themes/default/theme.lua")
 -- {{{ Naughty presets
 local naughty = require("naughty")
 naughty.config.defaults.timeout = 5

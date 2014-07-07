@@ -24,10 +24,9 @@ mytextclock         = awful.widget.textclock()
 -------------------------------------------------------------------------------------------
 -- Виджет использования процессора
 -------------------------------------------------------------------------------------------
-cpuicon             = wibox.widget.imagebox()
-cpuicon:set_image(configpath .. "/themes/default/widgets/cpu.png")
-
-cpu=blingbling.line_graph.new()
+    cpuicon             = wibox.widget.imagebox()
+    cpuicon:set_image(configpath .. "/themes/default/widgets/cpu.png")
+    cpu=blingbling.line_graph.new()
     cpu:set_font_size(12)
     cpu:set_height(22)
     cpu:set_width(60)
@@ -39,97 +38,122 @@ cpu=blingbling.line_graph.new()
     cpu:set_text_background_color(beautiful.background_text_color)
     cpu:set_h_margin(2)
     vicious.register(cpu, vicious.widgets.cpu, '$1',1)
-
 -------------------------------------------------------------------------------------------
 -- Виджет виджет загрузки сети
 -------------------------------------------------------------------------------------------
-    netwidget = blingbling.net({interface = "wlp3s0", show_text = true})
-    blingbling.popups.netstat(netwidget) --,{ title_color = beautiful.notify_font_color_1, 
-                                         --   established_color= beautiful.notify_font_color_3, 
-                                         -- listen_color=beautiful.notify_font_color_2})
+    netwidget = blingbling.net({interface = "wlan0", show_text = true})
+    --blingbling.popups.netstat(netwidget, { title_color = beautiful.notify_font_color_1, established_color= beautiful.notify_font_color_3, listen_color=beautiful.notify_font_color_2})
     --netwidget:set_ippopup()
+    --netwidget:set_text(true)
+    --netwidget:set_v_margin(3)
 -------------------------------------------------------------------------------------------
 -- Виджет заряда батареи
 -------------------------------------------------------------------------------------------
-batt                = wibox.widget.textbox()
-vicious.register(batt, vicious.widgets.bat, "Batt: $2% Rem: $3", 61, "BAT0")
-battext             = wibox.widget.textbox("battext")
-battext1            = wibox.widget.textbox("battext")
+    baticon0 = wibox.widget.imagebox()
+    baticon0:set_image(beautiful.widget_batfull)
+    baticon1 = wibox.widget.imagebox()
+    baticon1:set_image(beautiful.widget_batfull)
+    battext             = wibox.widget.textbox("battext")
+    battext1            = wibox.widget.textbox("battext")
+
 function battery_status_text(widget, args)
     local perc = args[2]
-    if perc < 15 then
+    if perc < 6 then
+        baticon0:set_image(beautiful.widget_batempty)
         return '<span color="red">' .. perc .. '%</span>'
-    elseif perc < 50 then
+    elseif perc < 35 then
+        baticon0:set_image(beautiful.widget_batlow)
+        return '<span color="red">' .. perc .. '%</span>'
+    elseif perc < 80 then
+        baticon0:set_image(beautiful.widget_batmed)
         return '<span color="yellow">' .. perc .. '%</span>'
     end
+        baticon0:set_image(beautiful.widget_batfull)
     return '<span color="#8EAE6E">' .. perc .. '%</span>'
 end
 vicious.register(battext, vicious.widgets.bat, battery_status_text, 120, "BAT0")
 vicious.register(battext1, vicious.widgets.bat, battery_status_text, 120, "BAT1")
 
--- Icon
-baticon = wibox.widget.imagebox()
---baticon:set_image(beautiful.widget_batfull)
-baticon:set_image(configpath .. "/themes/default/widgets/bat.png")
-
-
 -------------------------------------------------------------------------------------------
 -- Виджет использования памяти
 -------------------------------------------------------------------------------------------
-  -- Mem Widget
-    memvidget = blingbling.line_graph.new()
-    memvidget:set_font_size(12)
-    memvidget:set_height(22)
-    memvidget:set_width(60)
-    memvidget:set_show_text(true)
-    memvidget:set_label("$percent %")
-    memvidget:set_graph_color(beautiful.graph_color)
-    memvidget:set_graph_line_color(beautiful.graph_line_color)
-    memvidget:set_text_color(beautiful.text_color)
-    memvidget:set_text_background_color(beautiful.background_text_color)
-    memvidget:set_h_margin(2)
-    --vicious.register(memvidget, vicious.widgets.mem, "$1", 5)
+    memwidget = blingbling.line_graph.new()
+    memwidget:set_font_size(12)
+    memwidget:set_height(18)
+    memwidget:set_width(60)
+    memwidget:set_show_text(true)
+    memwidget:set_label("$percent %")
+    memwidget:set_background_color("#00000000")
+    memwidget:set_graph_color(beautiful.graph_color)
+    memwidget:set_graph_line_color(beautiful.graph_line_color)
+    memwidget:set_text_color(beautiful.text_color)
+    memwidget:set_text_background_color(beautiful.background_text_color)
+    memwidget:set_h_margin(2)
+    --vicious.register(memwidget, vicious.widgets.mem, "$1", 5)
 
-memicon = wibox.widget.imagebox()
---memicon:set_image(beautiful.widget_memfull)
-memicon:set_image(configpath .. "/themes/default/widgets/ram.png")
--- Регистрация виджета
---memwidget = wibox.widget.textbox("battext")
-vicious.register(memvidget, vicious.widgets.mem, function(widget, args)
-  mem_procent  = args[1]
-  mem_used = args[2]
-  mem_total   = args[3]
-  mem_free   = args[4]
-  return args[1]
-end, nil, 13)
---Всплывающее меню
-function popup_mem()
-  naughty.notify { 
-      title = "Использование памяти", 
-      text = "Занято      : ".. mem_used .."Mb\nСвободно    : " .. mem_free .. "Mb\nВсего       : " .. mem_total .. "Mb", 
-      timeout = 5, 
-      hover_timeout = 0.5 }
-end
+    memicon = wibox.widget.imagebox()
+    --memicon:set_image(beautiful.widget_memfull)
+    memicon:set_image(configpath .. "/themes/default/widgets/ram.png")
+    vicious.register(memwidget, vicious.widgets.mem, function(widget, args)
+        mem_procent  = args[1]
+        mem_used = args[2]
+        mem_total   = args[3]
+        mem_free   = args[4]
+        return args[1]
+    end, nil, 13)
+    --Всплывающее меню
+    function popup_mem()
+        naughty.notify { 
+            title = "Использование памяти", 
+            text = "Занято      : ".. mem_used .."Mb\nСвободно    : " .. mem_free .. "Mb\nВсего       : " .. mem_total .. "Mb", 
+            timeout = 5, 
+            hover_timeout = 0.5 }
+    end
 memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
-memvidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
-
-
-
-  --Volume
-    --volume_label = wibox.widget.textbox
-    --volume_label.text= setFs("large","Vol.: ")
+memwidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+-------------------------------------------------------------------------------------------
+-- Виджет виджет звуковой индикации
+-------------------------------------------------------------------------------------------
     my_volume=blingbling.volume.new()
     my_volume:set_height(18)
-    my_volume:set_v_margin(2)
-    my_volume:set_width(30)
+    my_volume:set_v_margin(1)
+    my_volume:set_width(20)
     my_volume:update_master()
     my_volume:set_master_control()
     my_volume:set_bar(true)
-    --my_volume:set_background_graph_color("#00000066")
     my_volume:set_graph_color(beautiful.graph_line_color)
+-------------------------------------------------------------------------------------------
+-- Виджет переключения клавиатуры
+-------------------------------------------------------------------------------------------
+    kbdwidget = wibox.widget.textbox(" Eng ")
+    kbdwidget.border_width = 1
+    kbdwidget.border_color = beautiful.fg_normal
+    kbdwidget:set_text(" Eng ")
+    kbdstrings = {[0] = " Eng ", 
+              [1] = " Рус "}
+    dbus.request_name("session", "ru.gentoo.kbdd")
+    dbus.add_match("session", "interface='ru.gentoo.kbdd',member='layoutChanged'")
+    dbus.connect_signal("ru.gentoo.kbdd", function(...)
+        local data = {...}
+        local layout = data[2]
+        kbdwidget:set_markup(kbdstrings[layout])
+    end)
+-------------------------------------------------------------------------------------------
+-- Виджет виджет использования файловой системы
+-------------------------------------------------------------------------------------------
+    diskicon = wibox.widget.imagebox()
+    diskicon:set_image(beautiful.widget_disk)
 
+    home_fs_usage=blingbling.value_text_box({height = 18, width = 40, v_margin = 3})
+    home_fs_usage:set_text_background_color(beautiful.widget_background)
+    home_fs_usage:set_values_text_color(colors_stops)
+    --home_fs_usage:set_font_size(8)
+    home_fs_usage:set_background_color("#00000000")
+    home_fs_usage:set_label("home: $percent %")
+    vicious.register(home_fs_usage, vicious.widgets.fs, "${/home used_p}", 120 )
 -------------------------------------------------------------------------------------------
 -- Create a wibox for each screen and add it
+-------------------------------------------------------------------------------------------
 local mywibox = {}
 mypromptbox = {}
 local mylayoutbox = {}
@@ -219,17 +243,19 @@ for s = 1, screen.count() do
     right_layout:add(cpu)
     --right_layout:add(cpuwidget)
     --right_layout:add(batwidget)
-    right_layout:add(baticon)
+    right_layout:add(diskicon)
+    right_layout:add(home_fs_usage)
+    right_layout:add(baticon0)
     right_layout:add(battext)
-    right_layout:add(baticon)
+    right_layout:add(baticon1)
     right_layout:add(battext1)
     --right_layout:add(batwidget1)
     right_layout:add(memicon)
-    --right_layout:add(memwidget)
-    right_layout:add(memvidget)
+    right_layout:add(memwidget)
     right_layout:add(netwidget)
     right_layout:add(my_volume)
     right_layout:add(mytextclock)
+    right_layout:add(kbdwidget)
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
