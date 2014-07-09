@@ -58,24 +58,38 @@ mytextclock         = awful.widget.textclock()
     end
 
 function battery_status_text(widget, args)
-    local perc = args[2]
-    if perc < 6 then
-        baticon[i]:set_image(beautiful.widget_batempty)
-        return '<span color="red">' .. perc .. '%</span>'
-    elseif perc < 35 then
-        baticon[i]:set_image(beautiful.widget_batlow)
-        return '<span color="red">' .. perc .. '%</span>'
-    elseif perc < 85 then
-        baticon[i]:set_image(beautiful.widget_batmed)
-        return '<span color="yellow">' .. perc .. '%</span>'
+  local bat_state  = args[1]
+  local bat_charge = args[2]
+  local bat_time   = args[3]
+  if args[1] ~= "+" then
+    if bat_charge > 70 then
+      baticon[i]:set_image(beautiful.widget_batfull)
+        return '<span color="green">' .. bat_charge .. '%</span>'
+    elseif bat_charge > 30 then
+      baticon[i]:set_image(beautiful.widget_batmed)
+        return '<span color="yellow">' .. bat_charge .. '%</span>'
+    elseif bat_charge > 10 then
+      baticon[i]:set_image(beautiful.widget_batlow)
+        return '<span color="red">' .. bat_charge .. '%</span>'
+    else
+      baticon[i]:set_image(beautiful.widget_batempty)
+        return '<span color="red">' .. bat_charge .. '%</span>'
     end
-        baticon[i]:set_image(beautiful.widget_batfull)
-    return '<span color="#8EAE6E">' .. perc .. '%</span>'
+  else
+    baticon[i]:set_image(beautiful.widget_ac)
+    if args[1] == "+" then
+      blink = not blink
+      if blink then
+        baticon[i]:set_image(beautiful.widget_acblink)
+      end
+    end
+  end
+  return args[2] .. "%"
 end
-i = 0
-vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 120, "BAT0")
-i = 1
-vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 120, "BAT1")
+    i = 0
+    vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 120, "BAT"..i)
+    i = 1
+    vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 120, "BAT"..i)
 
 -------------------------------------------------------------------------------------------
 -- Виджет использования памяти
@@ -245,14 +259,12 @@ for s = 1, screen.count() do
     right_layout:add(cpuicon)
     right_layout:add(cpu)
     --right_layout:add(cpuwidget)
-    --right_layout:add(batwidget)
     right_layout:add(diskicon)
     right_layout:add(home_fs_usage)
-    for i = 0,1 do
-        right_layout:add(baticon[i])
-        right_layout:add(battext[i])
-    end
-    --right_layout:add(batwidget1)
+    right_layout:add(baticon[0])
+    right_layout:add(battext[0])
+    right_layout:add(baticon[1])
+    right_layout:add(battext[1])
     right_layout:add(memicon)
     right_layout:add(memwidget)
     right_layout:add(netwidget)
