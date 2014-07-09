@@ -49,30 +49,33 @@ mytextclock         = awful.widget.textclock()
 -------------------------------------------------------------------------------------------
 -- Виджет заряда батареи
 -------------------------------------------------------------------------------------------
-    baticon0 = wibox.widget.imagebox()
-    baticon0:set_image(beautiful.widget_batfull)
-    baticon1 = wibox.widget.imagebox()
-    baticon1:set_image(beautiful.widget_batfull)
-    battext             = wibox.widget.textbox("battext")
-    battext1            = wibox.widget.textbox("battext")
+    local baticon = {}
+    local battext = {}
+    for i = 0,1 do
+        baticon[i] = wibox.widget.imagebox()
+        baticon[i]:set_image(beautiful.widget_batfull)
+        battext[i]         = wibox.widget.textbox("battext")
+    end
 
 function battery_status_text(widget, args)
     local perc = args[2]
     if perc < 6 then
-        baticon0:set_image(beautiful.widget_batempty)
+        baticon[i]:set_image(beautiful.widget_batempty)
         return '<span color="red">' .. perc .. '%</span>'
     elseif perc < 35 then
-        baticon0:set_image(beautiful.widget_batlow)
+        baticon[i]:set_image(beautiful.widget_batlow)
         return '<span color="red">' .. perc .. '%</span>'
-    elseif perc < 80 then
-        baticon0:set_image(beautiful.widget_batmed)
+    elseif perc < 85 then
+        baticon[i]:set_image(beautiful.widget_batmed)
         return '<span color="yellow">' .. perc .. '%</span>'
     end
-        baticon0:set_image(beautiful.widget_batfull)
+        baticon[i]:set_image(beautiful.widget_batfull)
     return '<span color="#8EAE6E">' .. perc .. '%</span>'
 end
-vicious.register(battext, vicious.widgets.bat, battery_status_text, 120, "BAT0")
-vicious.register(battext1, vicious.widgets.bat, battery_status_text, 120, "BAT1")
+i = 0
+vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 120, "BAT0")
+i = 1
+vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 120, "BAT1")
 
 -------------------------------------------------------------------------------------------
 -- Виджет использования памяти
@@ -245,10 +248,10 @@ for s = 1, screen.count() do
     --right_layout:add(batwidget)
     right_layout:add(diskicon)
     right_layout:add(home_fs_usage)
-    right_layout:add(baticon0)
-    right_layout:add(battext)
-    right_layout:add(baticon1)
-    right_layout:add(battext1)
+    for i = 0,1 do
+        right_layout:add(baticon[i])
+        right_layout:add(battext[i])
+    end
     --right_layout:add(batwidget1)
     right_layout:add(memicon)
     right_layout:add(memwidget)
