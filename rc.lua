@@ -6,6 +6,7 @@ local awful = require("awful")
 require("awful.autofocus")
 -- Theme handling library
 local beautiful = require("beautiful")
+local naughty = require("naughty")
 -- Notification library
 local menubar = require("menubar")
 
@@ -16,8 +17,8 @@ local status = {
   modkey = "Mod4",
   altkey = "Mod1",
   config = {
-    wlan_if = 'wlan0',
-    eth_if = 'eth0'
+    wlan_if = "wlan0",
+    eth_if = "eth0"
   },
 }
 local configpath = awful.util.getdir("config")
@@ -34,26 +35,6 @@ config.toolbar.init(status)
 config.keys.init(status)
 config.rules.init(status)
 config.signals.init(status)
-
--- {{{ Variable definitions
--- {{{ Naughty presets
-local naughty = require("naughty")
-naughty.config.defaults.timeout = 5
-naughty.config.defaults.screen = 1
-naughty.config.defaults.position = "top_right"
-naughty.config.defaults.margin = 8
-naughty.config.defaults.gap = 1
-naughty.config.defaults.ontop = true
-naughty.config.defaults.font = "terminus 10"
-naughty.config.defaults.icon = nil
---naughty.config.defaults.icon_size = 256
-naughty.config.defaults.icon_size = 16
-naughty.config.defaults.fg = beautiful.fg_tooltip
-naughty.config.defaults.bg = beautiful.bg_tooltip
-naughty.config.defaults.border_color = beautiful.border_tooltip
-naughty.config.defaults.border_width = 2
-naughty.config.defaults.hover_timeout = nil
--- -- }}}
 
 -- This is used later as the default terminal and editor to run.
 terminal = "xterm"

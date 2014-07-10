@@ -16,16 +16,16 @@ local configpath    = awful.util.getdir("config")
 
 local toolbar = {}
 function toolbar.init(status)
-local modkey        = status.modkey
+    local modkey        = status.modkey
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock         = awful.widget.textclock()
+    mytextclock         = awful.widget.textclock()
 -------------------------------------------------------------------------------------------
 -- Виджет использования процессора
 -------------------------------------------------------------------------------------------
     cpuicon             = wibox.widget.imagebox()
-    cpuicon:set_image(configpath .. "/themes/default/widgets/cpu.png")
+    cpuicon:set_image(beautiful.widget_cpu)
     cpu=blingbling.line_graph.new()
     cpu:set_font_size(12)
     cpu:set_height(22)
@@ -126,8 +126,8 @@ end
             timeout = 5, 
             hover_timeout = 0.5 }
     end
-memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
-memwidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+    memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
+    memwidget:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
 -------------------------------------------------------------------------------------------
 -- Виджет виджет звуковой индикации
 -------------------------------------------------------------------------------------------
