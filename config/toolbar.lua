@@ -49,6 +49,10 @@ function toolbar.init(status)
 -------------------------------------------------------------------------------------------
 -- Виджет заряда батареи
 -------------------------------------------------------------------------------------------
+    local bat_state  = ""
+    local bat_charge = 0
+    local bat_time   = 0
+    local blink      = true
     local baticon = {}
     local battext = {}
     for i = 0,1 do
