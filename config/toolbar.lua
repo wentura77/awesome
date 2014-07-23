@@ -26,7 +26,8 @@ function toolbar.init(status)
 -------------------------------------------------------------------------------------------
     cpuicon             = wibox.widget.imagebox()
     cpuicon:set_image(beautiful.widget_cpu)
-    cpu=blingbling.line_graph.new()
+
+    cpu                 = blingbling.line_graph.new()
     cpu:set_font_size(12)
     cpu:set_height(22)
     cpu:set_width(60)
@@ -41,7 +42,8 @@ function toolbar.init(status)
 -------------------------------------------------------------------------------------------
 -- Виджет виджет загрузки сети
 -------------------------------------------------------------------------------------------
-    netwidget = blingbling.net({interface = "wlan0", show_text = true})
+    netwidget           = blingbling.net({interface = "wlan0", show_text = true})
+    --netwidget:set_ippopup()
     --blingbling.popups.netstat(netwidget, { title_color = beautiful.notify_font_color_1, established_color= beautiful.notify_font_color_3, listen_color=beautiful.notify_font_color_2})
     --netwidget:set_ippopup()
     --netwidget:set_text(true)
@@ -77,7 +79,7 @@ function battery_status_text(widget, args)
         return '<span color="red">' .. bat_charge .. '%</span>'
     else
       baticon[i]:set_image(beautiful.widget_batempty)
-        return '<span color="red">' .. bat_charge .. '%</span>'
+        return '<span color="brown">' .. bat_charge .. '%</span>'
     end
   else
     baticon[i]:set_image(beautiful.widget_ac)
@@ -91,9 +93,9 @@ function battery_status_text(widget, args)
   return args[2] .. "%"
 end
     i = 0
-    vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 120, "BAT"..i)
+    vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 12, "BAT"..i)
     i = 1
-    vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 120, "BAT"..i)
+    vicious.register(battext[i], vicious.widgets.bat, battery_status_text, 12, "BAT"..i)
 
 -------------------------------------------------------------------------------------------
 -- Виджет использования памяти
@@ -124,10 +126,10 @@ end
     end, nil, 13)
     --Всплывающее меню
     function popup_mem()
-        naughty.notify { 
-            title = "Использование памяти", 
-            text = "Занято      : ".. mem_used .."Mb\nСвободно    : " .. mem_free .. "Mb\nВсего       : " .. mem_total .. "Mb", 
-            timeout = 5, 
+        naughty.notify {
+            title = "Использование памяти",
+            text = "Занято      : ".. mem_used .."Mb\nСвободно    : " .. mem_free .. "Mb\nВсего       : " .. mem_total .. "Mb",
+            timeout = 5,
             hover_timeout = 0.5 }
     end
     memicon:buttons(awful.util.table.join(awful.button({ }, 1, popup_mem)))
@@ -150,7 +152,7 @@ end
     kbdwidget.border_width = 1
     kbdwidget.border_color = beautiful.fg_normal
     kbdwidget:set_text(" Eng ")
-    kbdstrings = {[0] = " Eng ", 
+    kbdstrings = {[0] = " Eng ",
               [1] = " Рус "}
     dbus.request_name("session", "ru.gentoo.kbdd")
     dbus.add_match("session", "interface='ru.gentoo.kbdd',member='layoutChanged'")
